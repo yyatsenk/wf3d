@@ -20,93 +20,87 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <time.h>
+# include <errno.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
-# define BLUE 0x375587
-# define WHITE 0xe3e9f4
-# define ERROR_MSG "Usage:./fractol [mandelbrot, julia, burningship]\n"
+# define ERROR_MSG "Usage:./wolf3d [filename]\n"
+# define BAD_FILE_MSG "Bad line size\n"
+# define BAD_BORDERS_MSG "Bad borders\n"
 # define HEIGHT 720
 # define WIDTH 1080
+# define MOVE_FORWARD	65363
+# define MOVE_BACK  65361
+# define MOVE_LEFT	65362
+# define MOVE_RIGHT 65364
+# define EXIT		65307
+# define GO_FASTER  102
+# define GO_SLOWER 	115
+# define PSYCHO_ON		112
+# define PSYCHO_OFF		111
+# define COLORS			
 
-typedef struct	s_coo
-{
-	int			x0;
-	int			x1;
-	int			y0;
-	int			y1;
-	double		deltax;
-	double		deltay;
-}				t_cc;
-
-typedef struct		s_vec
+typedef struct		s_float_c
 {
 	float			x;
 	float			y;
-}					t_vec;
+}					t_float_c;
 
-typedef struct		s_ivec
+typedef struct		s_int_c
 {
 	int				x;
 	int				y;
-} t_ivec;
+} 					t_int_c;
 
 typedef struct	s_mlx
 {
 	void		*mlx_ptr;
 	void		*win_ptr;
 	void		*image_ptr;
-	unsigned	color;
-	unsigned	color_1;
-	unsigned	color_2;
 	int			*data;
 	int			bpp;
 	int			size_line;
 	int			end;
-	float		pos_x;
-	float		pos_y;
-	float		dir_x;
-	float		dir_y;
-	float		plain_x;
-	float		plain_y;
-	float		time;
-	float		oldtime;
-	float		camera_x;
-	int 		map_x;
-    int 		map_y;
-	int			**map;
-	char		*name;
-	int			iter;
-	int			inf_zoom;
+	t_float_c		pos;
+	t_float_c		dir;
+	t_float_c		plain;
+	char 		*str;
+	int			**game_map;
+	char		*filename;
+	int 		color_change;
 
 
-	unsigned int	c1;
-	unsigned int	c2;
-	unsigned int	c3;
-	unsigned int	c4;
-	unsigned int	c_s;
-	unsigned int	c_g;
-	t_vec step;
-	float cameraX;
-	float rayDirX;
-	float rayDirY;
-	int mapX;
-	int mapY;
-	float sideDistX;
-	float sideDistY;
-	float deltaDistX;
-	float deltaDistY;
-	float perpWallDist;
-	int stepX;
-	int stepY;
-	int hit;
-	int side;
-	int lineHeight;
-	int drawStart;
-	int drawEnd;
-	float frameTime;
-	float moveSpeed;
-	float rotSpeed;
-	t_cc	cord;
+	unsigned int	color1;
+	unsigned int	color2;
+	unsigned int	color3;
+	unsigned int	color4;
+	unsigned int	ceil_color;
+	unsigned int	ground_color;
+	t_float_c 			ray_dir;
+	t_int_c 			map;
+	t_float_c 			side_dist;
+	t_float_c 			delta_dist;
+	t_int_c 			draw_srt_end;
+	t_int_c 			step;
+	float 				wall_dist;
+	int 				wall_is_here;
+	int 				side;
+	int 				line_height;
+	float 				move_speed;
+	float 				rot_speed;
+	float 				cam;
+	int					map_size;
+	double old_dir;
+    double old_plain;
 }				t_mlx;
-
-
+void check_map_pasring(char *filename, t_mlx *mlx);
+int				icon_close(void);
+void		per(void);
+void color_intlz(t_mlx *mlx);
+void		mlx_struct_init(t_mlx *mlx, char *name);
+int			key_hook(int keycode, t_mlx *mlx);
+void free_2d(char **str);
+void free_2d_int(int **arr, int size);
+int draw_it_for_me(t_mlx *mlx);
+void			draw_line(t_mlx *mlx, int x);
 #endif

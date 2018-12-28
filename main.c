@@ -12,326 +12,415 @@
 
 #include "wolf3d.h"
 
-#define mapWidth 24
-#define mapHeight 24
-
-int worldMap[mapWidth][mapHeight]=
+void free_2d(char **str)
 {
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1},
-  {1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,1,0,1,1,0,0,0,0,1,0,1,0,1,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,4,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
+  int i;
+  
+  i = -1;
+  while (str[++i])
+    free(str[i]);
+  free(str[i]);
+  free(str);
+}
 
-
-    
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void free_2d_int(int **arr, int size)
+{
+  int i;
+  
+  i = -1;
+  while (++i < size)
+    free(arr[i]);
+  free(arr);
+}
+/*
+void move_for_back(int keycode, t_mlx *mlx)
+{
+  if (keycode == MOVE_FORWARD)
+  {
+    mlx->old_dir = mlx->dir.x;
+    mlx->dir.x = mlx->dir.x * cos(-mlx->rot_speed) -\
+     mlx->dir.y * sin(-mlx->rot_speed);
+    mlx->dir.y = mlx->old_dir * sin(-mlx->rot_speed) +\
+     mlx->dir.y * cos(-mlx->rot_speed);
+    mlx->old_plain = mlx->plain.x;
+    mlx->plain.x = mlx->plain.x * cos(-mlx->rot_speed) -\
+     mlx->plain.y * sin(-mlx->rot_speed);
+    mlx->plain.y = mlx->old_plain * sin(-mlx->rot_speed) +\
+     mlx->plain.y * cos(-mlx->rot_speed);
+  }
+  if (keycode == MOVE_BACK)
+  {
+    mlx->old_dir = mlx->dir.x;
+    mlx->dir.x = mlx->dir.x * cos(mlx->rot_speed) -\
+     mlx->dir.y * sin(mlx->rot_speed);
+    mlx->dir.y = mlx->old_dir * sin(mlx->rot_speed) + mlx->dir.y *\
+     cos(mlx->rot_speed);
+    mlx->old_plain = mlx->plain.x;
+    mlx->plain.x = mlx->plain.x * cos(mlx->rot_speed) -\
+     mlx->plain.y * sin(mlx->rot_speed);
+    mlx->plain.y = mlx->old_plain * sin(mlx->rot_speed) +\
+     mlx->plain.y * cos(mlx->rot_speed);
+  }
+}
+*/
+void color_intlz(t_mlx *mlx)
+{
+    mlx->color1 = 0x002570;
+	  mlx->color2 = 0x00704a;
+	  mlx->color3 = 0x6a6d03;
+	  mlx->color4 = 0x6d026b;
+	  mlx->ceil_color = 0x0090ff;
+    mlx->ground_color = 0x664848;
+}
+/*
+void bonus(int keycode, t_mlx *mlx)
+{
+  if (keycode == GO_FASTER)
+    if (mlx->move_speed < 3)
+      mlx->move_speed += 0.4;
+  if (keycode == GO_SLOWER)
+    if (mlx->move_speed > 0.4)
+      mlx->move_speed -= 0.4;
+  if (keycode == PSYCHO_ON)
+    mlx->color_change = 1;
+  if (keycode == PSYCHO_OFF)
+  {
+    mlx->color_change = 0;
+    color_intlz(mlx);
+  }
+}
 
 int			key_hook(int keycode, t_mlx *mlx)
 {
-	if (keycode == 65307)
+  printf("%d\n", keycode);
+	if (keycode == EXIT)
+  {
+    free_2d_int(mlx->game_map, mlx->map_size);
 		exit(1);
-    
-    if (keycode == 65362)
-    {
-      printf("hahahahahha\n");
-      if(worldMap[(int)(mlx->pos_x + mlx->dir_x * mlx->moveSpeed)][(int)(mlx->pos_y)] == 0) mlx->pos_x += mlx->dir_x * mlx->moveSpeed;
-      if(worldMap[(int)(mlx->pos_x)][(int)(mlx->pos_y + mlx->dir_y * mlx->moveSpeed)] == 0) mlx->pos_y += mlx->dir_y * mlx->moveSpeed;
-    }
-    //move backwards if no wall behind you
-    if (keycode == 65364)
-    {
-      if(worldMap[(int)(mlx->pos_x - mlx->dir_x * mlx->moveSpeed)][(int)(mlx->pos_y)] == 0) mlx->pos_x -= mlx->dir_x * mlx->moveSpeed;
-      if(worldMap[(int)(mlx->pos_x)][(int)(mlx->pos_y - mlx->dir_y * mlx->moveSpeed)] == 0) mlx->pos_y -= mlx->dir_y * mlx->moveSpeed;
-    }
-    //rotate to the right
-    if (keycode == 65363)
-    {
-      //both camera direction and camera plane must be rotated
-      double olddir_x = mlx->dir_x;
-      mlx->dir_x = mlx->dir_x * cos(-mlx->rotSpeed) - mlx->dir_y * sin(-mlx->rotSpeed);
-      mlx->dir_y = olddir_x * sin(-mlx->rotSpeed) + mlx->dir_y * cos(-mlx->rotSpeed);
-      double oldplain_x = mlx->plain_x;
-      mlx->plain_x = mlx->plain_x * cos(-mlx->rotSpeed) - mlx->plain_y * sin(-mlx->rotSpeed);
-      mlx->plain_y = oldplain_x * sin(-mlx->rotSpeed) + mlx->plain_y * cos(-mlx->rotSpeed);
-    }
-    //rotate to the left
-    if (keycode == 65361)
-    {
-      //both camera direction and camera plane must be rotated
-      double olddir_x = mlx->dir_x;
-      mlx->dir_x = mlx->dir_x * cos(mlx->rotSpeed) - mlx->dir_y * sin(mlx->rotSpeed);
-      mlx->dir_y = olddir_x * sin(mlx->rotSpeed) + mlx->dir_y * cos(mlx->rotSpeed);
-      double oldplain_x = mlx->plain_x;
-      mlx->plain_x = mlx->plain_x * cos(mlx->rotSpeed) - mlx->plain_y * sin(mlx->rotSpeed);
-      mlx->plain_y = oldplain_x * sin(mlx->rotSpeed) + mlx->plain_y * cos(mlx->rotSpeed);
-    }
+  }
+  if (keycode == MOVE_LEFT)
+  {
+    if(mlx->game_map[(int)(mlx->pos.x + mlx->dir.x *\
+    mlx->move_speed)][(int)(mlx->pos.y)] == 0)
+      mlx->pos.x += mlx->dir.x * mlx->move_speed;
+    if(mlx->game_map[(int)(mlx->pos.x)][(int)(mlx->pos.y +\
+    mlx->dir.y * mlx->move_speed)] == 0)
+      mlx->pos.y += mlx->dir.y * mlx->move_speed;
+  }
+  if (keycode == MOVE_RIGHT)
+  {
+    if(mlx->game_map[(int)(mlx->pos.x - mlx->dir.x *\
+    mlx->move_speed)][(int)(mlx->pos.y)] == 0)
+      mlx->pos.x -= mlx->dir.x * mlx->move_speed;
+    if(mlx->game_map[(int)(mlx->pos.x)][(int)(mlx->pos.y -\
+    mlx->dir.y * mlx->move_speed)] == 0)
+      mlx->pos.y -= mlx->dir.y * mlx->move_speed;
+  }
+  move_for_back(keycode, mlx);
+  bonus(keycode, mlx);
 	return (0);
 }
 
+*/
 void		mlx_struct_init(t_mlx *mlx, char *name)
 {
-	mlx->name = name;
-	
-//	mlx->iter = 100;
-	
-    mlx->pos_x = 22;
-    mlx->pos_y = 12; 
-    mlx->dir_x = -1;
-    mlx->dir_y = 0; 
-    mlx->plain_x = 0;
-    mlx->plain_y = 1;
-    mlx->time = 0; 
-    mlx->oldtime = 0; 
-    mlx->c1 = 0x002570;
-	mlx->c2 = 0x00704a;
-	mlx->c3 = 0x6a6d03;
-	mlx->c4 = 0x6d026b;
-	mlx->c_s = 0x0090ff;
-  mlx->c_g = 0x664848;
+	  mlx->filename = name;
+    mlx->pos.x = 22;
+    mlx->pos.y = 12; 
+    mlx->dir.x = -1;
+    mlx->dir.y = 0; 
+    mlx->plain.x = 0;
+    mlx->plain.y = 1;
+    mlx->move_speed = 0.3;
+    mlx->rot_speed = 0.3;
+    color_intlz(mlx);
+    mlx->mlx_ptr = mlx_init();
+		mlx->win_ptr = mlx_new_window(mlx->mlx_ptr, WIDTH, HEIGHT, "Wolf3d");
+		mlx->image_ptr = mlx_new_image(mlx->mlx_ptr, WIDTH, HEIGHT);
+		mlx->data = (int*)mlx_get_data_addr(mlx->image_ptr, &(mlx->bpp),\
+		&(mlx->size_line), &(mlx->end));
 }
 /*
-void draw_line(t_mlx *mlx, int x)
-{
 
-    int y = 0;
-  if (mlx->side == 0) mlx->perpWallDist = (mlx->mapX - mlx->pos_x + (1 - mlx->stepX) / 2) / mlx->rayDirX;
-      else           mlx->perpWallDist = (mlx->mapY - mlx->pos_x + (1 - mlx->stepY) / 2) / mlx->rayDirY;
-
-      //Calculate height of line to draw on screen
-      mlx->lineHeight = (int)(HEIGHT / mlx->perpWallDist);
-
-      //calculate lowest and highest pixel to fill in current stripe
-      mlx->drawStart = -(mlx->lineHeight) / 2 + HEIGHT / 2;
-      if(mlx->drawStart < 0)mlx->drawStart = 0;
-      mlx->drawEnd = mlx->lineHeight / 2 + HEIGHT / 2;
-      if(mlx->drawEnd >= HEIGHT)mlx->drawEnd = HEIGHT - 1;
-
-      //choose wall color
-      switch(worldMap[mlx->mapX][mlx->mapY])
-      {
-        case 1:  mlx->color = 0x4286f4;  break; //red
-        case 2:  mlx->color = 0x41f447;  break; //green
-        case 3:  mlx->color = 0x40bced;   break; //blue
-        case 4:  mlx->color = 0xf7f9f9;  break; //white
-        default: mlx->color = 0xf2f91b; break; //yellow
-      }
-      mlx->cord.x0 = x;
-      mlx->cord.x1 = x;
-      mlx->cord.y0 = mlx->drawStart;
-      mlx->cord.y1 = mlx->drawEnd;
-
-
-      //give x and y sides different brightness
-      if (mlx->side == 1) {mlx->color = mlx->color / 2;}
-
-  while (y < mlx->drawStart)
-  {
-    mlx->data[WIDTH * y + x] = mlx->color;
-    y++;
-  }
-  y = 0;
-  while (y < mlx->drawEnd && y < HEIGHT)
-  {
-    mlx->data[WIDTH * y + x] = mlx->color;
-    y++;
-  }
-  y = 0;
-  while (y < HEIGHT)
-  {
-    mlx->data[WIDTH * y + x] = mlx->color;
-    y++;
-  }
-}*/
-
-
-//vkazbodi draw
-
-
-unsigned int	wall(t_mlx *mlx)
+unsigned int	if_wall(t_mlx *mlx)
 {
 	if ((mlx->step.x == -1 && mlx->step.y == -1) ||
 		(mlx->step.x == 1 && mlx->step.y == -1))
-		return (mlx->c1);
+		return (mlx->color1);
 	if ((mlx->step.x == -1 && mlx->step.y == 1) ||
 		(mlx->step.x == 1 && mlx->step.y == 1))
-		return (mlx->c2);
+		return (mlx->color2);
 	return (0);
 }
 
-void			put_pxl(t_mlx *mlx, int x, int y, unsigned int c)
+void			put_it(t_mlx *mlx, int x, int y, unsigned int c)
 {
-	int		i;
-
-	if (c != mlx->c_s && c != mlx->c_g)
+	if (c != mlx->ceil_color && c != mlx->ground_color)
 	{
 		if (mlx->side == 1)
-			c = wall(mlx);
+			c = if_wall(mlx);
 		else if ((mlx->step.x == -1 && mlx->step.y == -1) ||
 			(mlx->step.x == -1 && mlx->step.y == 1))
-			c = mlx->c3;
+			c = mlx->color3;
 		else
-			c = mlx->c4;
+			c = mlx->color4;
 	}
-	i = (y * WIDTH + x);
-	if (i <= WIDTH * HEIGHT)
-		mlx->data[i] = c;
+	if ((y * WIDTH + x) <= WIDTH * HEIGHT)
+		mlx->data[y * WIDTH + x] = c;
 }
 
 void			draw_line(t_mlx *mlx, int x)
 {
 	int				y;
-	unsigned int	c;
+	unsigned int	color;
 
-	   mlx->lineHeight = (int)(HEIGHT / mlx->perpWallDist);
-      mlx->drawStart = -(mlx->lineHeight) / 2 + HEIGHT / 2;
-      if(mlx->drawStart < 0)mlx->drawStart = 0;
-      mlx->drawEnd = mlx->lineHeight / 2 + HEIGHT / 2;
-      if(mlx->drawEnd >= HEIGHT)mlx->drawEnd = HEIGHT - 1;
-	c = 0x111111;
+	mlx->line_height = (int)(HEIGHT / mlx->wall_dist);
+  mlx->draw_srt_end.x = -(mlx->line_height) / 2 + HEIGHT / 2;
+  if(mlx->draw_srt_end.x < 0)
+    mlx->draw_srt_end.x = 0;
+  mlx->draw_srt_end.y = mlx->line_height / 2 + HEIGHT / 2;
+  if(mlx->draw_srt_end.y >= HEIGHT)
+    mlx->draw_srt_end.y = HEIGHT - 1;
+	color = 0x111111;
 	y = -1;
-	while (++y < mlx->drawStart)
-		put_pxl(mlx, x, y, mlx->c_s);
+	while (++y < mlx->draw_srt_end.x)
+		put_it(mlx, x, y, mlx->ceil_color);
 	y -= 1;
-	while (y++ <= mlx->drawEnd && y < HEIGHT)
-		put_pxl(mlx, x, y, c);
+	while (y++ <= mlx->draw_srt_end.y && y < HEIGHT)
+		put_it(mlx, x, y, color);
 	y -= 1;
 	while (y++ <= HEIGHT)
-		put_pxl(mlx, x, y, mlx->c_g);
+		put_it(mlx, x, y, mlx->ground_color);
 }
 
-
-void draw_it_for_me(t_mlx *mlx)
+void dda_find_algorithm(t_mlx *mlx)
 {
-  for(int x = 0; x < WIDTH; x++)
+  while (mlx->wall_is_here == 0)
+  {
+    if (mlx->side_dist.x < mlx->side_dist.y)
     {
-      //printf ("helooooooooo!!   %d\n", keycode);
-      //calculate ray position and direction
-     mlx->cameraX = 2 * x / (double)WIDTH - 1; //x-coordinate in camera space
-      mlx->rayDirX = mlx->dir_x + mlx->plain_x * mlx->cameraX;
-      mlx->rayDirY = mlx->dir_y + mlx->plain_y * mlx->cameraX;
-      //which box of the map we're in
-      mlx->mapX = (int)mlx->pos_x;
-      mlx->mapY = (int)mlx->pos_y;
+      mlx->side_dist.x += mlx->delta_dist.x;
+      mlx->map.x += mlx->step.x;
+      mlx->side = 0;
+    }
+    else
+    {
+      mlx->side_dist.y += mlx->delta_dist.y;
+      mlx->map.y += mlx->step.y;
+      mlx->side = 1;
+    }
+    if (mlx->game_map[mlx->map.x][mlx->map.y] > 0)
+    {
+      mlx->wall_is_here = 1;
+      if (mlx->side == 0) 
+        mlx->wall_dist = (mlx->map.x - mlx->pos.x\
+        + (1 - mlx->step.x) / 2) / mlx->ray_dir.x;
+      else          
+        mlx->wall_dist = (mlx->map.y - mlx->pos.y\
+        + (1 - mlx->step.y) / 2) / mlx->ray_dir.y;
+    }
+  }
+}
+void set_steps(t_mlx *mlx)
+{
+  if (mlx->ray_dir.x < 0 && (mlx->step.x = -1))
+    mlx->side_dist.x = (mlx->pos.x - mlx->map.x) *\
+    mlx->delta_dist.x;
+  else
+  {
+    mlx->step.x = 1;
+    mlx->side_dist.x = (mlx->map.x + 1 - mlx->pos.x) *\
+    mlx->delta_dist.x;
+  }
+  if (mlx->ray_dir.y < 0 && (mlx->step.y = -1))
+    mlx->side_dist.y = (mlx->pos.y - mlx->map.y) *\
+    mlx->delta_dist.y;
+  else
+  {
+    mlx->step.y = 1;
+    mlx->side_dist.y = (mlx->map.y + 1 - mlx->pos.y) *\
+    mlx->delta_dist.y;
+  }
+}
 
-      //length of ray from current position to next x or y-side
-       //length of ray from one x or y-side to next x or y-side
-      mlx->deltaDistX = sqrt(1 + pow(mlx->rayDirY, 2) / pow(mlx->rayDirX, 2));
-      mlx->deltaDistY = sqrt(1 + pow(mlx->rayDirX, 2) / pow(mlx->rayDirY, 2));
+int draw_it_for_me(t_mlx *mlx)
+{
+  int x;
 
-      //what direction to step in x or y-direction (either +1 or -1)
-      
-
-      mlx->hit = 0; //was there a wall hit?
-       //was a NS or a EW wall hit?
-      //calculate step and initial sideDist
-      
-      if (mlx->rayDirX < 0)
-      {
-        mlx->stepX = -1;
-        mlx->sideDistX = (mlx->pos_x - mlx->mapX) * mlx->deltaDistX;
-      }
-      else
-      {
-        mlx->stepX = 1;
-        mlx->sideDistX = (mlx->mapX + 1 - mlx->pos_x) * mlx->deltaDistX;
-      }
-      if (mlx->rayDirY < 0)
-      {
-        mlx->stepY = -1;
-        mlx->sideDistY = (mlx->pos_y - mlx->mapY) * mlx->deltaDistY;
-      }
-      else
-      {
-        mlx->stepY = 1;
-        mlx->sideDistY = (mlx->mapY + 1 - mlx->pos_y) * mlx->deltaDistY;
-      }
-      //perform DDA
-      while (mlx->hit == 0)
-      {
-        //jump to next map square, OR in x-direction, OR in y-direction
-        if (mlx->sideDistX < mlx->sideDistY)
-        {
-          mlx->sideDistX += mlx->deltaDistX;
-          mlx->mapX += mlx->stepX;
-          mlx->side = 0;
-        }
-        else
-        {
-          mlx->sideDistY += mlx->deltaDistY;
-          mlx->mapY += mlx->stepY;
-          mlx->side = 1;
-        }
-        //Check if ray has hit a wall
-        if (worldMap[mlx->mapX][mlx->mapY] > 0)
-        {
-          mlx->hit = 1;
-          if (mlx->side == 0) 
-            mlx->perpWallDist = (mlx->mapX - mlx->pos_x + (1 - mlx->stepX) / 2) / mlx->rayDirX;
-          else          
-            mlx->perpWallDist = (mlx->mapY - mlx->pos_y + (1 - mlx->stepY) / 2) / mlx->rayDirY;
-
-        }
-      }
-      mlx->step.x =  mlx->stepX;
-      mlx->step.y =  mlx->stepY;
+  x = -1;
+  if (mlx->color_change == 1)
+  {
+    if (mlx->color1 == 0 || mlx->color2 == 0\
+    || mlx->color3 == 0 || mlx->color4 == 0)
+      color_intlz(mlx);
+    else
+    {
+      mlx->color1 *= rand();
+	    mlx->color2 += rand();
+	    mlx->color3 += rand();
+	    mlx->color4 -= rand();
+      mlx->ceil_color -= rand();
+    }
+  }
+  while (++x < WIDTH)
+  {
+      mlx->cam = 2 * x / (double)WIDTH - 1;
+      mlx->ray_dir.x = mlx->dir.x + mlx->plain.x * mlx->cam;
+      mlx->ray_dir.y = mlx->dir.y + mlx->plain.y * mlx->cam;
+      mlx->map.x = (int)mlx->pos.x;
+      mlx->map.y = (int)mlx->pos.y;
+      mlx->delta_dist.x = sqrt(1 + pow(mlx->ray_dir.y, 2) / pow(mlx->ray_dir.x, 2));
+      mlx->delta_dist.y = sqrt(1 + pow(mlx->ray_dir.x, 2) / pow(mlx->ray_dir.y, 2));
+      mlx->wall_is_here = 0; 
+      set_steps(mlx);
+      dda_find_algorithm(mlx);
       draw_line(mlx, x);
-    
     }
     mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image_ptr, 0,0);
+    return (0);
 }
-int do_all_stuff(t_mlx *mlx)
+*/
+int				icon_close(void)
 {
-
-    //draw_it_for_me(mlx);
-    mlx->oldtime = mlx->time;
-    printf("%f",(1.0 / mlx->frameTime)); //FPS counter
-    draw_it_for_me(mlx);
-    printf("time: %f  oldtime: %f  frametime: %f\n", mlx->time, mlx->oldtime, mlx->frameTime);
-    //speed modifiers
-    mlx->moveSpeed = 0.4;//mlx->frameTime * 2.0; //the constant value is in squares/second
-    mlx->rotSpeed = 0.4;//mlx->frameTime * 1.5; //the constant value is in radians/second
+	  exit(1);
+	  return (0);
 }
 
+void		per(void)
+{
+	perror("\033[31mFile opening error");
+	exit(1);
+}
+/*
+int check_line_size(char **char_map)
+{
+  int i;
+
+  i = 0;
+  while (char_map && char_map[i])
+    i++;
+  return (i);
+}
+
+void fill_line_int(t_mlx *mlx,char **char_map, int y)
+{
+  int i;
+  int x;
+
+  i = 0;
+  x = 0;
+  if (check_line_size(char_map) != mlx->map_size)
+  {
+    write(1, BAD_FILE_MSG, ft_strlen(BAD_FILE_MSG));
+    free_2d(char_map);
+    free_2d_int(mlx->game_map, mlx->map_size);
+    exit(1);
+  }
+  mlx->game_map[y] = (int*)malloc(sizeof(int) * mlx->map_size);
+  while (char_map && char_map[i])
+  {
+    mlx->game_map[y][x] = ft_atoi(char_map[i]);
+    x++;
+    i++;
+  }
+}
+
+int check_border(t_mlx *mlx)
+{
+  int x;
+  int y;
+
+  x = -1;
+  y = -1;
+  while (++y < mlx->map_size)
+  {
+    while(++x < mlx->map_size)
+    {
+      if (y == 0 || y == mlx->map_size - 1)
+      {
+        if (mlx->game_map[y][x] != 1)
+          return (0);
+      }
+      else if (mlx->game_map[y][0] != 1\
+      || mlx->game_map[y][mlx->map_size - 1] != 1)
+        return (0);
+    }
+    x = -1;
+  }
+  return (1);
+}
+
+int parse_file(char *filename, t_mlx *mlx, int fd)
+{
+  char **char_map;
+  int   i;
+
+  i = 0;
+  if (fd < 0 || (get_next_line(fd, &mlx->str) < 1))
+  {
+    printf("loking for leaks_1\n");
+		return (-1);
+  }
+  char_map = ft_strsplit(mlx->str, ' ');
+  mlx->map_size = check_line_size(char_map);
+  mlx->game_map = (int**)malloc(sizeof(int*) * mlx->map_size);
+  fill_line_int(mlx, char_map, i);
+  free_2d(char_map);
+  free(mlx->str);
+	while (get_next_line(fd, &mlx->str) == 1)
+  {
+    i++;
+    if (i > mlx->map_size)
+    {
+      free_2d_int(mlx->game_map, mlx->map_size);
+      free(mlx->str);
+      printf("loking for leaks_1\n");
+      return (0);
+    }
+    char_map = ft_strsplit(mlx->str, ' ');
+    fill_line_int(mlx, char_map, i);
+    free_2d(char_map);
+    free(mlx->str);
+  }
+  if (!check_border(mlx))
+  {
+    write(1, BAD_BORDERS_MSG, ft_strlen(BAD_BORDERS_MSG));
+    free_2d(char_map);
+    exit(1);
+  }
+  return (1);
+}
+void check_map_pasring(char *filename, t_mlx *mlx)
+{
+  int fd;
+
+  fd = open(filename, O_RDONLY);
+	if ((read(fd, NULL, 0)) == -1)
+  {
+		per();
+  }
+	if (parse_file(filename, mlx, fd) == -1)
+  {
+    printf("saaadsadsadsa");
+    close(fd);
+    per();
+  }
+  close(fd);
+}
+*/
 int main(int argv, char **argc)
 {
   t_mlx	mlx;
 
 	if (argv == 2)
 	{
+    srand(time(0)); 
+    check_map_pasring(argc[1], &mlx);
 		mlx_struct_init(&mlx, argc[1]);
-		mlx.mlx_ptr = mlx_init();
-		mlx.win_ptr = mlx_new_window(mlx.mlx_ptr, WIDTH, HEIGHT, "Wolf3d");
-		mlx.image_ptr = mlx_new_image(mlx.mlx_ptr, WIDTH, HEIGHT);
-		mlx.data = (int*)mlx_get_data_addr(mlx.image_ptr, &(mlx.bpp),\
-		&(mlx.size_line), &(mlx.end));
-        //do_all_stuff(&mlx);
-		  //mlx_hook(mlx.win_ptr, 4, 0, zoom, mlx);
-	    //mlx_hook(mlx.win_ptr, 6, 0, mouse, mlx);
-      mlx_hook(mlx.win_ptr, 2, 5, key_hook, &mlx);
-      mlx_loop_hook(mlx.mlx_ptr, do_all_stuff, &mlx);
-	    //mlx_key_hook(mlx.win_ptr, key_hook, &mlx);
-	    mlx_loop(mlx.mlx_ptr);
+    mlx_hook(mlx.win_ptr, 2, 5, key_hook, &mlx);
+    mlx_hook(mlx.win_ptr, 17, 1L << 17, icon_close, 0);
+    mlx_loop_hook(mlx.mlx_ptr, draw_it_for_me, &mlx);
+    mlx_loop(mlx.mlx_ptr);
 	}
 	else
 		write(1, ERROR_MSG, ft_strlen(ERROR_MSG));

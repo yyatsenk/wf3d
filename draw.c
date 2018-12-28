@@ -12,67 +12,54 @@
 
 #include "wolf3d.h"
 
-void			window_start(t_map_info *map_info)
+
+static unsigned int	if_wall(t_mlx *mlx)
 {
-	map_info->mlx_ptr = mlx_init();
-	map_info->win_ptr = mlx_new_window(map_info->mlx_ptr, HEIGHT, WIDTH, "FDF");
+	if ((mlx->step.x == -1 && mlx->step.y == -1) ||
+		(mlx->step.x == 1 && mlx->step.y == -1))
+		return (mlx->color1);
+	if ((mlx->step.x == -1 && mlx->step.y == 1) ||
+		(mlx->step.x == 1 && mlx->step.y == 1))
+		return (mlx->color2);
+	return (0);
 }
 
-static void		draw_horizont(t_map_info *m_i, t_dot *dot)
+static void			put_it(t_mlx *mlx, int x, int y, unsigned int c)
 {
-	t_cc		c;
-	t_dot		*dot_copy;
-
-	dot_copy = dot;
-	while (dot)
+	if (c != mlx->ceil_color && c != mlx->ground_color)
 	{
-		c.x0 = dot->x_min;
-		c.y0 = dot->y_min;
-		if (dot->next && dot->y == dot->next->y)
-		{
-			c.x1 = dot->next->x_min;
-			c.y1 = dot->next->y_min;
-		}
+		if (mlx->side == 1)
+			c = if_wall(mlx);
+		else if ((mlx->step.x == -1 && mlx->step.y == -1) ||
+			(mlx->step.x == -1 && mlx->step.y == 1))
+			c = mlx->color3;
 		else
-		{
-			dot = dot->next;
-			continue;
-		}
-		if (dot->altitude)
-			make_line(m_i, c, 0, dot);
-		else
-			make_line(m_i, c, 0, dot->next);
-		dot = dot->next;
+			c = mlx->color4;
 	}
-	dot = dot_copy;
+	if ((y * WIDTH + x) <= WIDTH * HEIGHT)
+		mlx->data[y * WIDTH + x] = c;
 }
 
-static void		draw_vertical(t_map_info *m_i, t_dot *dot)
+void			draw_line(t_mlx *mlx, int x)
 {
-	t_cc		c;
-	t_dot		*dot_copy;
+	int				y;
+	unsigned int	color;
 
-	while (dot)
-	{
-		c.x0 = dot->x_min;
-		c.y0 = dot->y_min;
-		dot_copy = dot->next;
-		while (dot_copy && dot_copy->x != dot->x)
-			dot_copy = dot_copy->next;
-		if (!dot_copy)
-			break ;
-		c.x1 = dot_copy->x_min;
-		c.y1 = dot_copy->y_min;
-		if (dot->altitude)
-			make_line(m_i, c, 0, dot);
-		else
-			make_line(m_i, c, 0, dot_copy);
-		dot = dot->next;
-	}
-}
-
-void			draw_map(t_map_info *map_info, t_dot *dot)
-{
-	draw_horizont(map_info, dot);
-	draw_vertical(map_info, dot);
+	mlx->line_height = (int)(HEIGHT / mlx->wall_dist);
+  mlx->draw_srt_end.x = -(mlx->line_height) / 2 + HEIGHT / 2;
+  if(mlx->draw_srt_end.x < 0)
+    mlx->draw_srt_end.x = 0;
+  mlx->draw_srt_end.y = mlx->line_height / 2 + HEIGHT / 2;
+  if(mlx->draw_srt_end.y >= HEIGHT)
+    mlx->draw_srt_end.y = HEIGHT - 1;
+	color = 0x111111;
+	y = -1;
+	while (++y < mlx->draw_srt_end.x)
+		put_it(mlx, x, y, mlx->ceil_color);
+	y -= 1;
+	while (y++ <= mlx->draw_srt_end.y && y < HEIGHT)
+		put_it(mlx, x, y, color);
+	y -= 1;
+	while (y++ <= HEIGHT)
+		put_it(mlx, x, y, mlx->ground_color);
 }
