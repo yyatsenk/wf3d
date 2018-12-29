@@ -40,18 +40,18 @@ static void			put_it(t_mlx *mlx, int x, int y, unsigned int c)
 		mlx->data[y * WIDTH + x] = c;
 }
 
-void			draw_line(t_mlx *mlx, int x)
+void				draw_line(t_mlx *mlx, int x)
 {
 	int				y_ax;
 	unsigned int	color;
 
 	mlx->line_height = (int)(HEIGHT / mlx->wall_dist);
-  mlx->draw_srt_end.x = -(mlx->line_height) / 2 + HEIGHT / 2;
-  if(mlx->draw_srt_end.x < 0)
-    mlx->draw_srt_end.x = 0;
-  mlx->draw_srt_end.y = mlx->line_height / 2 + HEIGHT / 2;
-  if(mlx->draw_srt_end.y >= HEIGHT)
-    mlx->draw_srt_end.y = HEIGHT - 1;
+	mlx->draw_srt_end.x = -(mlx->line_height) / 2 + HEIGHT / 2;
+	if(mlx->draw_srt_end.x < 0)
+		mlx->draw_srt_end.x = 0;
+	mlx->draw_srt_end.y = mlx->line_height / 2 + HEIGHT / 2;
+	if(mlx->draw_srt_end.y >= HEIGHT)
+		mlx->draw_srt_end.y = HEIGHT - 1;
 	color = 0x111111;
 	y_ax = -1;
 	while (++y_ax < mlx->draw_srt_end.x)

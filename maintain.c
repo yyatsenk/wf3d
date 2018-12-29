@@ -12,35 +12,51 @@
 
 #include "wolf3d.h"
 
-
-void free_2d(char **str)
+static void	free_2d(t_mlx *mlx)
 {
-  int i;
-  
-  i = -1;
-  while (str[++i])
-    free(str[i]);
-  free(str[i]);
-  free(str);
+	int				i;
+	
+	i = -1;
+	if (!mlx->char_map)
+		return ;
+	while (mlx->char_map[++i])
+		free(mlx->char_map[i]);
+	free(mlx->char_map[i]);
+	free(mlx->char_map);
 }
 
-void free_2d_int(int **arr, int size)
+static void	free_2d_int(t_mlx *mlx)
 {
-  int i;
-  
-  i = -1;
-  while (++i < size)
-    free(arr[i]);
-  free(arr);
+	int				i;
+	
+	i = -1;
+	if (!mlx->game_map)
+		return ;
+	while (++i < mlx->map_size)
+		free(mlx->game_map[i]);
+	free(mlx->game_map);
 }
 
-int				icon_close(void)
+void				mlx_mem_free(t_mlx *mlx, int macro)
 {
+	free_2d(mlx);
+	if (macro == 1)
+		free_2d_int(mlx);
+	if (mlx->str)
+	{
+		free(mlx->str);
+		mlx->str = NULL;
+	}
+}
+
+int				icon_close(t_mlx *mlx)
+{
+	mlx_mem_free(mlx, FREE_MAP_INT);
 	exit(1);
 	return (0);
 }
 
-void		per(void)
+void			per(void)
 {
 	perror("\033[31mFile opening error");
 	exit(1);
