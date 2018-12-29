@@ -93,14 +93,13 @@ typedef struct	s_mlx
 	double old_dir;
     double old_plain;
 }				t_mlx;
-void check_map_pasring(char *filename, t_mlx *mlx);
-int				icon_close(void);
+void 		check_map_pasring(char *filename, t_mlx *mlx);
+int			icon_close(void);
 void		per(void);
-void color_intlz(t_mlx *mlx);
-void		mlx_struct_init(t_mlx *mlx, char *name);
+void 		color_intlz(t_mlx *mlx);
 int			key_hook(int keycode, t_mlx *mlx);
-void free_2d(char **str);
-void free_2d_int(int **arr, int size);
-int draw_it_for_me(t_mlx *mlx);
-void			draw_line(t_mlx *mlx, int x);
+void 		free_2d(char **str);
+void 		free_2d_int(int **arr, int size);
+int 		draw_it_for_me(t_mlx *mlx);
+void		draw_line(t_mlx *mlx, int x);
 #endif

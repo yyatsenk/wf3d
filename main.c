@@ -12,26 +12,6 @@
 
 #include "wolf3d.h"
 
-void free_2d(char **str)
-{
-  int i;
-  
-  i = -1;
-  while (str[++i])
-    free(str[i]);
-  free(str[i]);
-  free(str);
-}
-
-void free_2d_int(int **arr, int size)
-{
-  int i;
-  
-  i = -1;
-  while (++i < size)
-    free(arr[i]);
-  free(arr);
-}
 /*
 void move_for_back(int keycode, t_mlx *mlx)
 {
@@ -63,15 +43,7 @@ void move_for_back(int keycode, t_mlx *mlx)
   }
 }
 */
-void color_intlz(t_mlx *mlx)
-{
-    mlx->color1 = 0x002570;
-	  mlx->color2 = 0x00704a;
-	  mlx->color3 = 0x6a6d03;
-	  mlx->color4 = 0x6d026b;
-	  mlx->ceil_color = 0x0090ff;
-    mlx->ground_color = 0x664848;
-}
+
 /*
 void bonus(int keycode, t_mlx *mlx)
 {
@@ -122,7 +94,7 @@ int			key_hook(int keycode, t_mlx *mlx)
 }
 
 */
-void		mlx_struct_init(t_mlx *mlx, char *name)
+static void		mlx_struct_init(t_mlx *mlx, char *name)
 {
 	  mlx->filename = name;
     mlx->pos.x = 22;
@@ -280,17 +252,7 @@ int draw_it_for_me(t_mlx *mlx)
     return (0);
 }
 */
-int				icon_close(void)
-{
-	  exit(1);
-	  return (0);
-}
 
-void		per(void)
-{
-	perror("\033[31mFile opening error");
-	exit(1);
-}
 /*
 int check_line_size(char **char_map)
 {

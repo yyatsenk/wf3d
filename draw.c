@@ -42,7 +42,7 @@ static void			put_it(t_mlx *mlx, int x, int y, unsigned int c)
 
 void			draw_line(t_mlx *mlx, int x)
 {
-	int				y;
+	int				y_ax;
 	unsigned int	color;
 
 	mlx->line_height = (int)(HEIGHT / mlx->wall_dist);
@@ -53,13 +53,13 @@ void			draw_line(t_mlx *mlx, int x)
   if(mlx->draw_srt_end.y >= HEIGHT)
     mlx->draw_srt_end.y = HEIGHT - 1;
 	color = 0x111111;
-	y = -1;
-	while (++y < mlx->draw_srt_end.x)
-		put_it(mlx, x, y, mlx->ceil_color);
-	y -= 1;
-	while (y++ <= mlx->draw_srt_end.y && y < HEIGHT)
-		put_it(mlx, x, y, color);
-	y -= 1;
-	while (y++ <= HEIGHT)
-		put_it(mlx, x, y, mlx->ground_color);
+	y_ax = -1;
+	while (++y_ax < mlx->draw_srt_end.x)
+		put_it(mlx, x, y_ax, mlx->ceil_color);
+	y_ax -= 1;
+	while (y_ax++ <= mlx->draw_srt_end.y && y_ax < HEIGHT)
+		put_it(mlx, x, y_ax, color);
+	y_ax -= 1;
+	while (y_ax++ <= HEIGHT)
+		put_it(mlx, x, y_ax, mlx->ground_color);
 }
