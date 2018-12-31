@@ -43,6 +43,21 @@
 # define FREE_MAP_INT		1
 # define LEAVE_MAP_INT		0		
 
+
+
+typedef struct		s_texture
+{
+	void		*image;
+	void		*m;
+	void		*tex_mlx;
+	int			*ptr;
+	int			bpp;
+	int			size_line;
+	int			endian;
+	int			width;
+	int			height;
+} 					t_texture;
+
 typedef struct		s_float_c
 {
 	float			x;
@@ -79,6 +94,7 @@ typedef struct		s_mlx
 	unsigned int	ground_color;
 	t_float_c		ray_dir;
 	t_int_c			map;
+	t_int_c			txtr;
 	t_float_c		side_dist;
 	t_float_c		delta_dist;
 	t_int_c			draw_srt_end;
@@ -94,6 +110,8 @@ typedef struct		s_mlx
 	double			old_dir;
 	double			old_plain;
 	char			**char_map;
+	t_texture		texture[4];
+	double			wall_x;
 }					t_mlx;
 
 void				check_map_pasring(char *filename, t_mlx *mlx);
