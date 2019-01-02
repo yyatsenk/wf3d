@@ -12,6 +12,12 @@
 
 #include "wolf3d.h"
 
+void		per(void)
+{
+	perror("\033[31mFile opening error");
+	exit(1);
+}
+
 static void	dda_find_algorithm(t_mlx *mlx)
 {
 	while (mlx->wall_is_here == 0)
@@ -66,16 +72,15 @@ static void bonus_color_change(t_mlx *mlx)
 {
 	if (mlx->color_change == 1)
   	{
-		if (mlx->color1 == 0 || mlx->color2 == 0\
-		|| mlx->color3 == 0 || mlx->color4 == 0)
-			color_intlz(mlx);
+		if (!mlx->ceil_color || !mlx->ground_color)
+		{
+			mlx->ceil_color = 0x0090f1;
+			mlx->ground_color = 0x664842;
+		}
 		else
 		{
-			mlx->color1 *= rand();
-			mlx->color2 += rand();
-			mlx->color3 += rand();
-			mlx->color4 -= rand();
-			mlx->ceil_color -= rand();
+			mlx->ceil_color *= rand();
+			mlx->ground_color *= rand();
 		}
 	}
 }
@@ -86,6 +91,8 @@ int			draw_it_for_me(t_mlx *mlx)
 
 	x = -1;
 	bonus_color_change(mlx);
+	if (mlx->drunken == 1)
+		move_side(mlx, (float)0.01);
 	while (++x < WIDTH)
 	{
 		mlx->cam = 2 * x / (double)WIDTH - 1;

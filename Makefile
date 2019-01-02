@@ -19,8 +19,8 @@ RED=\033[31m
 YELL=\033[33m
 
 cc = gcc
-C_FLAGS =# -Wall -Wextra -Werror 
-FRAM = -I minilibx -lmlx -framework OpenGL -framework AppKit -g
+C_FLAGS = -Wall -Wextra -Werror 
+FRAM = #-I minilibx -lmlx -framework OpenGL -framework AppKit -g
 
 OBJ_PATH = ./obj/
 LFT_PATH = ./libft/

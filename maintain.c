@@ -56,8 +56,13 @@ int				icon_close(t_mlx *mlx)
 	return (0);
 }
 
-void			per(void)
+void write_interface(void)
 {
-	perror("\033[31mFile opening error");
-	exit(1);
+	write(1, "############################################\n", 46);
+	write(1, "# w,s,a,d - forward, backward, left, right #\n", 46);
+	write(1, "# f,v - go faster\\slower                   #\n", 46);
+	write(1, "# p,o - psycho mode on\\off                 #\n", 46);
+	write(1, "# c - sit down                             #\n", 46);
+	write(1, "# r - drunken mode                         #\n", 46);
+	write(1, "############################################\n", 46);
 }

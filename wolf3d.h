@@ -19,7 +19,6 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <time.h>
 # include <errno.h>
 # include <sys/stat.h>
 # include <fcntl.h>
@@ -30,16 +29,21 @@
 # define EMPTY_FILE_MSG		"Empty file\n"
 # define HEIGHT				720
 # define WIDTH				1080
-# define MOVE_FORWARD		65363
-# define MOVE_BACK			65361
-# define MOVE_LEFT			65362
-# define MOVE_RIGHT			65364
+# define MOVE_FORWARD		65362
+# define MOVE_BACK			65364
+# define MOVE_LEFT			65361
+# define MOVE_RIGHT			65363
 # define EXIT				65307
 # define GO_FASTER			102
-# define GO_SLOWER			115
+# define GO_SLOWER			118
 # define PSYCHO_ON			112
 # define PSYCHO_OFF			111
-# define COLORS	
+# define SIT_SOWN			99
+# define DRUNKEN			114
+# define W					119
+# define A					97
+# define S					115
+# define D					100
 # define FREE_MAP_INT		1
 # define LEAVE_MAP_INT		0		
 
@@ -86,10 +90,6 @@ typedef struct		s_mlx
 	int				**game_map;
 	char			*filename;
 	int				color_change;
-	unsigned int	color1;
-	unsigned int	color2;
-	unsigned int	color3;
-	unsigned int	color4;
 	unsigned int	ceil_color;
 	unsigned int	ground_color;
 	t_float_c		ray_dir;
@@ -112,6 +112,12 @@ typedef struct		s_mlx
 	char			**char_map;
 	t_texture		texture[4];
 	double			wall_x;
+	int				sit_down;
+	int				drunken;
+	int				sit_flag;
+	int				stat_x;
+
+
 }					t_mlx;
 
 void				check_map_pasring(char *filename, t_mlx *mlx);
@@ -123,4 +129,7 @@ int					draw_it_for_me(t_mlx *mlx);
 void				draw_line(t_mlx *mlx, int x);
 void				mlx_mem_free(t_mlx *mlx, int macro);
 void				end(t_mlx *mlx, int macro, const char *msg);
+int					mouse_hook(int x, int y, t_mlx *mlx);
+void				move_side(t_mlx *mlx, float rot);
+void				write_interface(void);
 #endif

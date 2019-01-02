@@ -12,18 +12,73 @@
 
 #include "wolf3d.h"
 
-void		color_intlz(t_mlx *mlx)
+void move_side(t_mlx *mlx, float rot)
 {
-	mlx->color1 = 0x002570;
-	mlx->color2 = 0x00704a;
-	mlx->color3 = 0x6a6d03;
-	mlx->color4 = 0x6d026b;
-	mlx->ceil_color = 0x0090ff;
-	mlx->ground_color = 0x664848;
+	mlx->old_dir = mlx->dir.x;
+	mlx->dir.x = mlx->dir.x * cos(rot) -\
+	mlx->dir.y * sin(rot);
+	mlx->dir.y = mlx->old_dir * sin(rot) + mlx->dir.y *\
+	cos(rot);
+	mlx->old_plain = mlx->plain.x;
+	mlx->plain.x = mlx->plain.x * cos(rot) -\
+	mlx->plain.y * sin(rot);
+	mlx->plain.y = mlx->old_plain * sin(rot) +\
+	mlx->plain.y * cos(rot);
+}
+
+
+int	mouse_hook(int x, int y, t_mlx *mlx)
+{
+	float rot;
+	
+	y = y;
+	if (!mlx->stat_x)
+		mlx->stat_x = x;
+	if (mlx->stat_x > x)
+	{
+		rot = ((mlx->stat_x - x) * 0.01);
+		move_side(mlx, rot);
+	}
+	if (mlx->stat_x < x)
+	{
+		rot = -((x - mlx->stat_x) * 0.01);
+		move_side(mlx, rot);
+	}
+	mlx->stat_x = x;
+	return (0);
 }
 
 static void	bonus(int keycode, t_mlx *mlx)
 {
+	if (keycode == SIT_SOWN)
+	{
+		if (mlx->sit_flag == 0)
+		{
+			mlx->sit_down = 20;
+			mlx->move_speed = 0.1;
+			mlx->sit_flag = 1;
+		}
+		else
+		{
+			mlx->sit_down = 0;
+			mlx->move_speed = 0.3;
+			mlx->sit_flag = 0;
+		}
+	}
+	if (keycode == DRUNKEN)
+		mlx->drunken = mlx->drunken ? 0 : 1;
+}
+
+static void move_left_right(int keycode, t_mlx *mlx)
+{
+	if (keycode == MOVE_RIGHT || keycode == D)
+	{
+		move_side(mlx, -mlx->rot_speed);
+	}
+	if (keycode == MOVE_LEFT || keycode == A)
+	{
+		move_side(mlx, mlx->rot_speed);
+	}
 	if (keycode == GO_FASTER)
 		if (mlx->move_speed < 1)
 			mlx->move_speed += 0.1;
@@ -35,43 +90,9 @@ static void	bonus(int keycode, t_mlx *mlx)
 	if (keycode == PSYCHO_OFF)
 	{
 		mlx->color_change = 0;
-		color_intlz(mlx);
+		mlx->ceil_color = 0x0090f1;
+		mlx->ground_color = 0x664842;
 	}
-}
-
-static void move_back(int keycode, t_mlx *mlx)
-{
-	if (keycode == MOVE_BACK)
-	{
-		mlx->old_dir = mlx->dir.x;
-		mlx->dir.x = mlx->dir.x * cos(mlx->rot_speed) -\
-		mlx->dir.y * sin(mlx->rot_speed);
-		mlx->dir.y = mlx->old_dir * sin(mlx->rot_speed) + mlx->dir.y *\
-		cos(mlx->rot_speed);
-		mlx->old_plain = mlx->plain.x;
-		mlx->plain.x = mlx->plain.x * cos(mlx->rot_speed) -\
-		mlx->plain.y * sin(mlx->rot_speed);
-		mlx->plain.y = mlx->old_plain * sin(mlx->rot_speed) +\
-		mlx->plain.y * cos(mlx->rot_speed);
-	}
-}
-
-static void move_for_back(int keycode, t_mlx *mlx)
-{
-	if (keycode == MOVE_FORWARD)
-	{
-		mlx->old_dir = mlx->dir.x;
-		mlx->dir.x = mlx->dir.x * cos(-mlx->rot_speed) -\
-		mlx->dir.y * sin(-mlx->rot_speed);
-		mlx->dir.y = mlx->old_dir * sin(-mlx->rot_speed) +\
-		mlx->dir.y * cos(-mlx->rot_speed);
-		mlx->old_plain = mlx->plain.x;
-		mlx->plain.x = mlx->plain.x * cos(-mlx->rot_speed) -\
-		mlx->plain.y * sin(-mlx->rot_speed);
-		mlx->plain.y = mlx->old_plain * sin(-mlx->rot_speed) +\
-		mlx->plain.y * cos(-mlx->rot_speed);
-	}
-	move_back(keycode, mlx);
 	bonus(keycode, mlx);
 }
 
@@ -82,7 +103,7 @@ int			key_hook(int keycode, t_mlx *mlx)
 		mlx_mem_free(mlx, FREE_MAP_INT);
 		exit(1);
 	}
-	if (keycode == MOVE_LEFT)
+	if (keycode == MOVE_FORWARD || keycode == W)
 	{
 		if(mlx->game_map[(int)(mlx->pos.x + mlx->dir.x *\
 		mlx->move_speed)][(int)(mlx->pos.y)] == 0)
@@ -91,7 +112,7 @@ int			key_hook(int keycode, t_mlx *mlx)
 		mlx->dir.y * mlx->move_speed)] == 0)
 	  		mlx->pos.y += mlx->dir.y * mlx->move_speed;
 	}
-	if (keycode == MOVE_RIGHT)
+	if (keycode == MOVE_BACK || keycode == S)
 	{
 		if(mlx->game_map[(int)(mlx->pos.x - mlx->dir.x *\
 		mlx->move_speed)][(int)(mlx->pos.y)] == 0)
@@ -100,6 +121,6 @@ int			key_hook(int keycode, t_mlx *mlx)
 		mlx->dir.y * mlx->move_speed)] == 0)
 			mlx->pos.y -= mlx->dir.y * mlx->move_speed;
 	}
-	move_for_back(keycode, mlx);
+	move_left_right(keycode, mlx);
 	return (0);
 }

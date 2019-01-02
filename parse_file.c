@@ -70,7 +70,7 @@ static int	check_border(t_mlx *mlx)
 	return (1);
 }
 
-static void	parse_file(char *filename, t_mlx *mlx, int fd)
+static void	parse_file(t_mlx *mlx, int fd)
 {
 	int		i;
 
@@ -108,6 +108,6 @@ void		check_map_pasring(char *filename, t_mlx *mlx)
 			per();
 		end(mlx, LEAVE_MAP_INT, EMPTY_FILE_MSG);
 	}
-	parse_file(filename, mlx, fd);
+	parse_file(mlx, fd);
 	close(fd);
 }
