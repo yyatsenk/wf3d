@@ -20,15 +20,15 @@ YELL=\033[33m
 
 cc = gcc
 C_FLAGS = -Wall -Wextra -Werror 
-FRAM = #-I minilibx -lmlx -framework OpenGL -framework AppKit -g
+FRAM = -I minilibx -lmlx -framework OpenGL -framework AppKit 
 
 OBJ_PATH = ./obj/
 LFT_PATH = ./libft/
-INC_PATH = ./includes/
+INC_PATH = .
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
 INC_NAME = wolf3d.h
-SRC_NAME = main.c 
+SRC_NAME = main.c draw.c maintain.c moving.c parse_file.c play.c
 SRC = $(addprefix ,$(SRC_NAME))
 OBJ = $(addprefix $(OBJ_PATH),$(OBJ_NAME))
 INC = $(addprefix -I,$(INC_PATH))

@@ -29,25 +29,24 @@
 # define EMPTY_FILE_MSG		"Empty file\n"
 # define HEIGHT				720
 # define WIDTH				1080
-# define MOVE_FORWARD		65362
-# define MOVE_BACK			65364
-# define MOVE_LEFT			65361
-# define MOVE_RIGHT			65363
-# define EXIT				65307
-# define GO_FASTER			102
-# define GO_SLOWER			118
-# define PSYCHO_ON			112
-# define PSYCHO_OFF			111
-# define SIT_SOWN			99
-# define DRUNKEN			114
-# define W					119
-# define A					97
-# define S					115
-# define D					100
+# define MOVE_FORWARD		126
+# define MOVE_BACK			125
+# define MOVE_LEFT			123
+# define MOVE_RIGHT			124
+# define EXIT				53
+# define GO_FASTER			3
+# define GO_SLOWER			9
+# define PSYCHO_ON			35
+# define PSYCHO_OFF			31
+# define SIT_SOWN			8
+# define DRUNKEN			15
+# define W					13
+# define A					0
+# define S					1
+# define D					2
+# define Q					12
 # define FREE_MAP_INT		1
-# define LEAVE_MAP_INT		0		
-
-
+# define LEAVE_MAP_INT		0
 
 typedef struct		s_texture
 {
@@ -60,7 +59,7 @@ typedef struct		s_texture
 	int			endian;
 	int			width;
 	int			height;
-} 					t_texture;
+}					t_texture;
 
 typedef struct		s_float_c
 {
@@ -86,7 +85,7 @@ typedef struct		s_mlx
 	t_float_c		pos;
 	t_float_c		dir;
 	t_float_c		plain;
-	char 			*str;
+	char			*str;
 	int				**game_map;
 	char			*filename;
 	int				color_change;
@@ -116,19 +115,17 @@ typedef struct		s_mlx
 	int				drunken;
 	int				sit_flag;
 	int				stat_x;
-
-
 }					t_mlx;
 
 void				check_map_pasring(char *filename, t_mlx *mlx);
-int					icon_close(t_mlx *mlx);
+int					icon_close(void);
 void				per(void);
 void				color_intlz(t_mlx *mlx);
 int					key_hook(int keycode, t_mlx *mlx);
 int					draw_it_for_me(t_mlx *mlx);
 void				draw_line(t_mlx *mlx, int x);
 void				mlx_mem_free(t_mlx *mlx, int macro);
-void				end(t_mlx *mlx, int macro, const char *msg);
+void				end(const char *msg);
 int					mouse_hook(int x, int y, t_mlx *mlx);
 void				move_side(t_mlx *mlx, float rot);
 void				write_interface(void);

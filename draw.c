@@ -12,7 +12,6 @@
 
 #include "wolf3d.h"
 
-
 static unsigned int	if_wall(t_mlx *mlx)
 {
 	if (mlx->side == 1)
@@ -46,9 +45,9 @@ static void			maintain_texture(t_mlx *mlx, int c)
 		mlx->wall_x = mlx->pos.x + mlx->wall_dist * mlx->ray_dir.x;
 	mlx->wall_x -= floor((mlx->wall_x));
 	mlx->txtr.x = (int)(mlx->wall_x * (double)mlx->texture[c].width);
-	if(mlx->side == 0 && mlx->ray_dir.x > 0)
+	if (mlx->side == 0 && mlx->ray_dir.x > 0)
 		mlx->txtr.x = mlx->texture[c].width - mlx->txtr.x - 1;
-	if(mlx->side == 1 && mlx->ray_dir.y < 0)
+	if (mlx->side == 1 && mlx->ray_dir.y < 0)
 		mlx->txtr.x = mlx->texture[c].width - mlx->txtr.x - 1;
 }
 
@@ -57,15 +56,15 @@ static void			draw_walls(t_mlx *mlx, int c, int y_ax, int x)
 	int				color;
 	int				var;
 	int				dd;
-	
+
 	dd = y_ax * 256 - HEIGHT * 128 + mlx->line_height * 128;
-	mlx->txtr.y = ((dd * mlx->texture[c].width) /mlx->line_height) / 256;
+	mlx->txtr.y = ((dd * mlx->texture[c].width) / mlx->line_height) / 256;
 	var = mlx->texture[c].width * mlx->txtr.y + mlx->txtr.x;
 	if (var < 0)
 		var = -var;
 	if (var < mlx->texture[c].width * mlx->texture[c].height && var >= 0)
 		color = mlx->texture[c].ptr[var];
-	if(mlx->side == 1)
+	if (mlx->side == 1)
 		color = (color >> 1) & 8355711;
 	put_it(mlx, x, y_ax, color);
 }
@@ -74,15 +73,15 @@ void				draw_line(t_mlx *mlx, int x)
 {
 	int				y_ax;
 	int				c;
-	
+
 	mlx->line_height = (int)(HEIGHT / mlx->wall_dist);
 	mlx->draw_srt_end.x = -(mlx->line_height) /\
 	2 + HEIGHT / 2 - mlx->sit_down;
-	if(mlx->draw_srt_end.x < 0)
+	if (mlx->draw_srt_end.x < 0)
 		mlx->draw_srt_end.x = 0;
 	mlx->draw_srt_end.y = mlx->line_height / 2 + HEIGHT /\
 	2 - mlx->sit_down;
-	if(mlx->draw_srt_end.y >= HEIGHT)
+	if (mlx->draw_srt_end.y >= HEIGHT)
 		mlx->draw_srt_end.y = HEIGHT - 1;
 	c = if_wall(mlx);
 	maintain_texture(mlx, c);

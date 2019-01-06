@@ -12,9 +12,8 @@
 
 #include "wolf3d.h"
 
-void			end(t_mlx *mlx, int macro, const char *msg)
+void			end(const char *msg)
 {
-	mlx_mem_free(mlx, macro);
 	write(1, msg, ft_strlen(msg));
 	exit(1);
 }
@@ -23,9 +22,9 @@ static void		mlx_struct_init(t_mlx *mlx, char *name)
 {
 	mlx->filename = name;
 	mlx->pos.x = 22;
-	mlx->pos.y = 12; 
+	mlx->pos.y = 12;
 	mlx->dir.x = -1;
-	mlx->dir.y = 0; 
+	mlx->dir.y = 0;
 	mlx->plain.x = 0;
 	mlx->plain.y = 1;
 	mlx->move_speed = 0.3;
@@ -40,44 +39,44 @@ static void		mlx_struct_init(t_mlx *mlx, char *name)
 	mlx->stat_x = 0;
 }
 
-static void get_textures_2(t_mlx *mlx)
+static void		get_textures_2(t_mlx *mlx)
 {
 	if (!(mlx->texture[2].image = (void*)mlx_xpm_file_to_image(mlx->mlx_ptr,\
 	"textures_hi/brick.xpm", &(mlx->texture[2].width),
 	&(mlx->texture[2].height))))
-		end(mlx, LEAVE_MAP_INT, "Bad texture is used\n");
+		end("Bad texture is used\n");
 	mlx->texture[2].ptr = (int*)mlx_get_data_addr(mlx->texture[2].image,\
 	&(mlx->texture[2].bpp), &(mlx->texture[2].size_line),
 	&(mlx->texture[2].endian));
 	if (!(mlx->texture[3].image = (void*)mlx_xpm_file_to_image(mlx->mlx_ptr,\
 	"textures_hi/metal.xpm", &(mlx->texture[3].width),
 	&(mlx->texture[3].height))))
-		end(mlx, LEAVE_MAP_INT, "Bad texture is used\n");
+		end("Bad texture is used\n");
 	mlx->texture[3].ptr = (int*)mlx_get_data_addr(mlx->texture[3].image,\
 	&(mlx->texture[3].bpp), &(mlx->texture[3].size_line),
 	&(mlx->texture[3].endian));
 }
 
-static void get_textures(t_mlx *mlx)
+static void		get_textures(t_mlx *mlx)
 {
-	if(!(mlx->texture[0].image = (void*)mlx_xpm_file_to_image(mlx->mlx_ptr,\
+	if (!(mlx->texture[0].image = (void*)mlx_xpm_file_to_image(mlx->mlx_ptr,\
 	"textures_hi/wood.xpm", &(mlx->texture[0].width),
 	&(mlx->texture[0].height))))
-		end(mlx, LEAVE_MAP_INT, "Bad texture is used\n");
+		end("Bad texture is used\n");
 	mlx->texture[0].ptr = (int*)mlx_get_data_addr(mlx->texture[0].image,\
 	&(mlx->texture[0].bpp), &(mlx->texture[0].size_line),
 	&(mlx->texture[0].endian));
-	if(!(mlx->texture[1].image = (void*)mlx_xpm_file_to_image(mlx->mlx_ptr,\
+	if (!(mlx->texture[1].image = (void*)mlx_xpm_file_to_image(mlx->mlx_ptr,\
 	"textures_hi/stone.xpm", &(mlx->texture[1].width),
 	&(mlx->texture[1].height))))
-		end(mlx, LEAVE_MAP_INT, "Bad texture is used\n");
+		end("Bad texture is used\n");
 	mlx->texture[1].ptr = (int*)mlx_get_data_addr(mlx->texture[1].image,\
 	&(mlx->texture[1].bpp), &(mlx->texture[1].size_line),
 	&(mlx->texture[1].endian));
 	get_textures_2(mlx);
 }
 
-int 		main(int argv, char **argc)
+int				main(int argv, char **argc)
 {
 	t_mlx	mlx;
 
@@ -96,7 +95,7 @@ int 		main(int argv, char **argc)
 		write_interface();
 		mlx_hook(mlx.win_ptr, 2, 5, key_hook, &mlx);
 		mlx_hook(mlx.win_ptr, 6, 1L << 6, mouse_hook, &mlx);
-		mlx_hook(mlx.win_ptr, 17, 1L << 17, icon_close, &mlx);
+		mlx_hook(mlx.win_ptr, 17, 1L << 17, icon_close, 0);
 		mlx_loop_hook(mlx.mlx_ptr, draw_it_for_me, &mlx);
 		mlx_loop(mlx.mlx_ptr);
 	}

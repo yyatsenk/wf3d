@@ -12,7 +12,7 @@
 
 #include "wolf3d.h"
 
-void move_side(t_mlx *mlx, float rot)
+void		move_side(t_mlx *mlx, float rot)
 {
 	mlx->old_dir = mlx->dir.x;
 	mlx->dir.x = mlx->dir.x * cos(rot) -\
@@ -26,12 +26,11 @@ void move_side(t_mlx *mlx, float rot)
 	mlx->plain.y * cos(rot);
 }
 
-
-int	mouse_hook(int x, int y, t_mlx *mlx)
+int			mouse_hook(int x, int y, t_mlx *mlx)
 {
 	float rot;
-	
-	y = y;
+
+	y += 1;
 	if (!mlx->stat_x)
 		mlx->stat_x = x;
 	if (mlx->stat_x > x)
@@ -69,16 +68,12 @@ static void	bonus(int keycode, t_mlx *mlx)
 		mlx->drunken = mlx->drunken ? 0 : 1;
 }
 
-static void move_left_right(int keycode, t_mlx *mlx)
+static void	move_left_right(int keycode, t_mlx *mlx)
 {
 	if (keycode == MOVE_RIGHT || keycode == D)
-	{
 		move_side(mlx, -mlx->rot_speed);
-	}
 	if (keycode == MOVE_LEFT || keycode == A)
-	{
 		move_side(mlx, mlx->rot_speed);
-	}
 	if (keycode == GO_FASTER)
 		if (mlx->move_speed < 1)
 			mlx->move_speed += 0.1;
@@ -98,26 +93,25 @@ static void move_left_right(int keycode, t_mlx *mlx)
 
 int			key_hook(int keycode, t_mlx *mlx)
 {
-	if (keycode == EXIT)
+	if (keycode == EXIT || keycode == Q)
 	{
-		mlx_mem_free(mlx, FREE_MAP_INT);
 		exit(1);
 	}
 	if (keycode == MOVE_FORWARD || keycode == W)
 	{
-		if(mlx->game_map[(int)(mlx->pos.x + mlx->dir.x *\
+		if (mlx->game_map[(int)(mlx->pos.x + mlx->dir.x *\
 		mlx->move_speed)][(int)(mlx->pos.y)] == 0)
-	 		mlx->pos.x += mlx->dir.x * mlx->move_speed;
-		if(mlx->game_map[(int)(mlx->pos.x)][(int)(mlx->pos.y +\
+			mlx->pos.x += mlx->dir.x * mlx->move_speed;
+		if (mlx->game_map[(int)(mlx->pos.x)][(int)(mlx->pos.y +\
 		mlx->dir.y * mlx->move_speed)] == 0)
-	  		mlx->pos.y += mlx->dir.y * mlx->move_speed;
+			mlx->pos.y += mlx->dir.y * mlx->move_speed;
 	}
 	if (keycode == MOVE_BACK || keycode == S)
 	{
-		if(mlx->game_map[(int)(mlx->pos.x - mlx->dir.x *\
+		if (mlx->game_map[(int)(mlx->pos.x - mlx->dir.x *\
 		mlx->move_speed)][(int)(mlx->pos.y)] == 0)
 			mlx->pos.x -= mlx->dir.x * mlx->move_speed;
-		if(mlx->game_map[(int)(mlx->pos.x)][(int)(mlx->pos.y -\
+		if (mlx->game_map[(int)(mlx->pos.x)][(int)(mlx->pos.y -\
 		mlx->dir.y * mlx->move_speed)] == 0)
 			mlx->pos.y -= mlx->dir.y * mlx->move_speed;
 	}

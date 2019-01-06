@@ -37,15 +37,16 @@ static void	dda_find_algorithm(t_mlx *mlx)
 		if (mlx->game_map[mlx->map.x][mlx->map.y] > 0)
 		{
 			mlx->wall_is_here = 1;
-			if (mlx->side == 0) 
+			if (mlx->side == 0)
 				mlx->wall_dist = (mlx->map.x - mlx->pos.x\
 				+ (1 - mlx->step.x) / 2) / mlx->ray_dir.x;
-		else
-			mlx->wall_dist = (mlx->map.y - mlx->pos.y\
-			+ (1 - mlx->step.y) / 2) / mlx->ray_dir.y;
+			else
+				mlx->wall_dist = (mlx->map.y - mlx->pos.y\
+				+ (1 - mlx->step.y) / 2) / mlx->ray_dir.y;
 		}
 	}
 }
+
 static void	set_steps(t_mlx *mlx)
 {
 	if (mlx->ray_dir.x < 0 && (mlx->step.x = -1))
@@ -68,10 +69,10 @@ static void	set_steps(t_mlx *mlx)
 	}
 }
 
-static void bonus_color_change(t_mlx *mlx)
+static void	bonus_color_change(t_mlx *mlx)
 {
 	if (mlx->color_change == 1)
-  	{
+	{
 		if (!mlx->ceil_color || !mlx->ground_color)
 		{
 			mlx->ceil_color = 0x0090f1;
@@ -104,11 +105,11 @@ int			draw_it_for_me(t_mlx *mlx)
 		/ pow(mlx->ray_dir.x, 2));
 		mlx->delta_dist.y = sqrt(1 + pow(mlx->ray_dir.x, 2)\
 		/ pow(mlx->ray_dir.y, 2));
-		mlx->wall_is_here = 0; 
+		mlx->wall_is_here = 0;
 		set_steps(mlx);
 		dda_find_algorithm(mlx);
 		draw_line(mlx, x);
 	}
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image_ptr, 0,0);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, mlx->image_ptr, 0, 0);
 	return (0);
 }

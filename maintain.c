@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   maintain.c                                       :+:      :+:    :+:   */
+/*   maintain.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yyatsenk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,8 +14,8 @@
 
 static void	free_2d(t_mlx *mlx)
 {
-	int				i;
-	
+	int		i;
+
 	i = -1;
 	if (!mlx->char_map)
 		return ;
@@ -27,8 +27,8 @@ static void	free_2d(t_mlx *mlx)
 
 static void	free_2d_int(t_mlx *mlx)
 {
-	int				i;
-	
+	int		i;
+
 	i = -1;
 	if (!mlx->game_map)
 		return ;
@@ -37,7 +37,7 @@ static void	free_2d_int(t_mlx *mlx)
 	free(mlx->game_map);
 }
 
-void				mlx_mem_free(t_mlx *mlx, int macro)
+void		mlx_mem_free(t_mlx *mlx, int macro)
 {
 	free_2d(mlx);
 	if (macro == 1)
@@ -49,14 +49,13 @@ void				mlx_mem_free(t_mlx *mlx, int macro)
 	}
 }
 
-int				icon_close(t_mlx *mlx)
+int			icon_close(void)
 {
-	mlx_mem_free(mlx, FREE_MAP_INT);
 	exit(1);
 	return (0);
 }
 
-void write_interface(void)
+void		write_interface(void)
 {
 	write(1, "############################################\n", 46);
 	write(1, "# w,s,a,d - forward, backward, left, right #\n", 46);
